@@ -107,3 +107,5 @@ MIT
 ---
 
 Part of the NOUMENON ecosystem.
+---
+Built by [Noumenon](https://github.com/Noumenon-ai)
