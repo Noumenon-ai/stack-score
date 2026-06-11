@@ -1,4 +1,11 @@
-"""Technology database — 50+ entries with scoring data."""
+"""Technology database — 40+ curated entries with scoring data.
+
+This is a hand-curated, opinionated database, not a live feed.
+github_stars values are point-in-time snapshots (last refreshed
+2026-06-11) and drift over time. CVE entries are verified against the
+GitHub Advisory Database / MITRE at the time of curation; always check
+current advisories before deploying.
+"""
 
 from __future__ import annotations
 
@@ -11,8 +18,8 @@ TECH_DATABASE: dict[str, dict] = {
         "github_stars": 128000,
         "last_release": "2026-03",
         "maintained": True,
-        "cves": ["CVE-2025-66478", "CVE-2025-29927"],
-        "min_safe_version": "15.1.4",
+        "cves": ["CVE-2025-29927"],
+        "min_safe_version": "15.2.3",
         "pairs_well_with": ["tailwind", "supabase", "vercel", "stripe", "prisma", "trpc"],
         "conflicts_with": [],
         "learning_curve": 7,
@@ -62,7 +69,7 @@ TECH_DATABASE: dict[str, dict] = {
         "aliases": ["svelte-kit", "svelte"],
         "category": "framework",
         "language": "javascript",
-        "github_stars": 80000,
+        "github_stars": 20500,
         "last_release": "2026-02",
         "maintained": True,
         "cves": [],
@@ -195,7 +202,7 @@ TECH_DATABASE: dict[str, dict] = {
         "github_stars": 75000,
         "last_release": "2026-03",
         "maintained": True,
-        "cves": ["GHSA-v36f", "GHSA-3529"],
+        "cves": ["CVE-2025-48370"],
         "min_safe_version": None,
         "pairs_well_with": ["next.js", "stripe", "vercel", "react-native"],
         "conflicts_with": [],
@@ -205,7 +212,10 @@ TECH_DATABASE: dict[str, dict] = {
         "cost_at_scale": 7,
         "hosting": ["supabase-cloud", "self-hosted"],
         "description": "Open-source Firebase alternative with Postgres",
-        "warnings": ["Enable RLS on ALL tables — 170+ apps exposed without it"],
+        "warnings": [
+            "Enable RLS on ALL tables — many apps have been exposed without it",
+            "Update @supabase/auth-js to >= 2.70.0 (CVE-2025-48370, low severity)",
+        ],
     },
     "postgresql": {
         "aliases": ["postgres", "pg"],
@@ -288,7 +298,7 @@ TECH_DATABASE: dict[str, dict] = {
         "github_stars": 4000,
         "last_release": "2026-03",
         "maintained": True,
-        "cves": ["ACTIVE-CAMPAIGN-2026"],
+        "cves": [],
         "min_safe_version": None,
         "pairs_well_with": ["next.js", "supabase", "vercel"],
         "conflicts_with": [],
@@ -515,7 +525,7 @@ TECH_DATABASE: dict[str, dict] = {
         "last_release": "2026-03",
         "maintained": True,
         "cves": ["CVE-2025-55182"],
-        "min_safe_version": "19.0.0",
+        "min_safe_version": "19.2.1",
         "pairs_well_with": ["next.js", "tailwind", "typescript"],
         "conflicts_with": ["vue", "svelte"],
         "learning_curve": 6,
@@ -524,6 +534,10 @@ TECH_DATABASE: dict[str, dict] = {
         "cost_at_scale": 10,
         "hosting": [],
         "description": "UI library for building component-based interfaces",
+        "warnings": [
+            "CVE-2025-55182 (critical RCE) affects the react-server-dom-webpack/"
+            "-turbopack/-parcel RSC packages 19.0.0-19.2.0 — patch to 19.1.2/19.2.1"
+        ],
     },
     "vue": {
         "aliases": ["vuejs", "vue.js"],
@@ -586,7 +600,7 @@ TECH_DATABASE: dict[str, dict] = {
         "github_stars": 110000,
         "last_release": "2026-01",
         "maintained": True,
-        "cves": ["CVE-2026-NODE-JAN"],
+        "cves": ["CVE-2025-23083"],
         "min_safe_version": "22.13.1",
         "pairs_well_with": ["express", "next.js", "typescript"],
         "conflicts_with": [],
@@ -634,6 +648,44 @@ TECH_DATABASE: dict[str, dict] = {
         "cost_at_scale": 10,
         "hosting": [],
         "description": "End-to-end typesafe API layer",
+    },
+
+    # ═══ CLI TOOLING ═══
+    "typer": {
+        "aliases": [],
+        "category": "cli",
+        "language": "python",
+        "github_stars": 19500,
+        "last_release": "2026-02",
+        "maintained": True,
+        "cves": [],
+        "min_safe_version": None,
+        "pairs_well_with": ["python", "rich"],
+        "conflicts_with": [],
+        "learning_curve": 2,
+        "performance": 9,
+        "cost": "free",
+        "cost_at_scale": 10,
+        "hosting": [],
+        "description": "Python CLI framework built on Click with type hints",
+    },
+    "rich": {
+        "aliases": [],
+        "category": "cli",
+        "language": "python",
+        "github_stars": 56500,
+        "last_release": "2026-03",
+        "maintained": True,
+        "cves": [],
+        "min_safe_version": None,
+        "pairs_well_with": ["python", "typer"],
+        "conflicts_with": [],
+        "learning_curve": 2,
+        "performance": 9,
+        "cost": "free",
+        "cost_at_scale": 10,
+        "hosting": [],
+        "description": "Rich text and beautiful formatting in the terminal",
     },
 
     # ═══ EMAIL ═══
