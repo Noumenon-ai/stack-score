@@ -48,3 +48,33 @@ def test_suggestions_generated():
 def test_cve_warnings():
     result = score_stack(["next.js", "react"])
     assert len(result.warnings) > 0  # Both have CVEs
+
+
+def test_rating_bands():
+    from stack_score.scorer import StackScore
+    def with_overall(n):
+        return StackScore(techs=[], resolved=[], unknown=[], dimensions=[], overall=n)
+    assert with_overall(87).rating == "EXCELLENT"
+    assert with_overall(84).rating == "STRONG"
+    assert with_overall(55).rating == "DECENT"
+    assert with_overall(35).rating == "WEAK"
+    assert with_overall(10).rating == "AVOID"
+
+
+def test_version_word_not_scored_as_tech():
+    from typer.testing import CliRunner
+    from stack_score.cli import app
+    runner = CliRunner()
+    result = runner.invoke(app, ["version"])
+    assert result.exit_code == 0
+    assert "stack-score v" in result.output
+    assert "AVOID" not in result.output
+
+
+def test_version_flag():
+    from typer.testing import CliRunner
+    from stack_score.cli import app
+    runner = CliRunner()
+    result = runner.invoke(app, ["--version"])
+    assert result.exit_code == 0
+    assert "stack-score v" in result.output

@@ -32,17 +32,33 @@ def test_get_tech_via_alias():
     assert data["category"] == "framework"
 
 
-def test_database_has_50_plus_entries():
-    assert len(TECH_DATABASE) >= 30  # At least 30 distinct technologies
+def test_database_has_40_plus_entries():
+    assert len(TECH_DATABASE) >= 40
 
 
 def test_proven_stacks_have_valid_techs():
+    # Every tech referenced by a proven stack must resolve to a DB entry.
     for name, stack in PROVEN_STACKS.items():
         for tech in stack["techs"]:
-            resolved = resolve_tech(tech)
-            # Some techs like "typer", "rich" might not be in DB — that's ok
-            # Just verify the stack structure is valid
-            assert isinstance(tech, str), f"Invalid tech in {name}: {tech}"
+            assert resolve_tech(tech) is not None, f"Unresolvable tech in {name}: {tech}"
+
+
+def test_all_cve_identifiers_are_well_formed():
+    import re
+    cve_pattern = re.compile(r"^CVE-\d{4}-\d{4,}$")
+    ghsa_pattern = re.compile(r"^GHSA-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}$")
+    for name, data in TECH_DATABASE.items():
+        for cve in data.get("cves", []):
+            assert cve_pattern.match(cve) or ghsa_pattern.match(cve), (
+                f"{name} has malformed security identifier: {cve}"
+            )
+
+
+def test_nextjs_min_safe_version_matches_advisory():
+    # CVE-2025-29927 (GHSA-f82v-jwr5-mffw): first patched 15.x version is 15.2.3
+    data = get_tech("next.js")
+    assert "CVE-2025-29927" in data["cves"]
+    assert data["min_safe_version"] == "15.2.3"
 
 
 def test_all_techs_have_required_fields():
