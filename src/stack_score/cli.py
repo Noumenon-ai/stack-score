@@ -22,6 +22,12 @@ app = typer.Typer(
 console = Console()
 
 
+def _version_callback(value: bool) -> None:
+    if value:
+        console.print(f"stack-score v{__version__}")
+        raise typer.Exit()
+
+
 @app.callback(invoke_without_command=True)
 def main(
     stack: Optional[str] = typer.Argument(None, help="Tech stack to score (e.g. 'next.js tailwind supabase')"),
@@ -29,8 +35,17 @@ def main(
     popular: bool = typer.Option(False, "--popular", help="Show top 10 proven stacks"),
     use_case: Optional[str] = typer.Option(None, "--for", help="Best stack for use case"),
     format: str = typer.Option("table", "--format", "-f", help="Output format: table or json"),
+    show_version: bool = typer.Option(
+        False, "--version", "-V", callback=_version_callback, is_eager=True,
+        help="Show stack-score version and exit",
+    ),
 ) -> None:
     """Score a tech stack or compare alternatives."""
+    # The bare word "version" is a version request, not a tech stack.
+    if stack and stack.strip().lower() == "version":
+        console.print(f"stack-score v{__version__}")
+        return
+
     if popular:
         stacks = get_popular_stacks()
         print_popular(stacks)
@@ -117,12 +132,6 @@ def _parse_stack_string(stack: str) -> list[str]:
     # Handle: "next.js + tailwind + supabase" or "next.js tailwind supabase"
     stack = stack.replace("+", " ").replace(",", " ")
     return [t.strip() for t in stack.split() if t.strip()]
-
-
-@app.command()
-def version() -> None:
-    """Show stack-score version."""
-    console.print(f"stack-score v{__version__}")
 
 
 if __name__ == "__main__":

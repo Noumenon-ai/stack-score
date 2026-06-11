@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from stack_score import __version__
 from stack_score.scorer import StackScore
 
 console = Console()
@@ -21,7 +22,7 @@ def print_score(result: StackScore) -> None:
     """Print stack score as a rich terminal table."""
     console.print()
     console.print(Panel.fit(
-        "[bold cyan]STACK-SCORE[/] v1.0.0",
+        f"[bold cyan]STACK-SCORE[/] v{__version__}",
         border_style="cyan",
     ))
     console.print()
